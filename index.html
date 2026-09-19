@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Crop Monitoring System</title>
+  <meta name="description" content="A simple, modern crop monitoring system for farmers to track crop health, soil conditions, and weather." />
+  <link rel="stylesheet" href="style.css" />
+  <!-- Chart.js CDN for clean, simple responsive charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+
+  <!-- ==========================================
+       SIDEBAR NAVIGATION
+       ========================================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-icon">🌾</div>
+      <div class="logo-text-group">
+        <span class="logo-title">CropWatch</span>
+        <span class="logo-sub">Smart Farm Assistant</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-btn active" data-section="home">
+        <span class="nav-icon">🏠</span><span>Home</span>
+      </button>
+      <button class="nav-btn" data-section="dashboard">
+        <span class="nav-icon">📊</span><span>Dashboard</span>
+      </button>
+      <button class="nav-btn" data-section="crops">
+        <span class="nav-icon">🌱</span><span>Crop Details</span>
+      </button>
+      <button class="nav-btn" data-section="soil">
+        <span class="nav-icon">🧪</span><span>Soil Monitoring</span>
+      </button>
+      <button class="nav-btn" data-section="weather">
+        <span class="nav-icon">⛅</span><span>Weather</span>
+      </button>
+      <button class="nav-btn" data-section="alerts">
+        <span class="nav-icon">🔔</span>
+        <span>Alerts</span>
+        <span class="badge" id="alertBadge">3</span>
+      </button>
+      <button class="nav-btn" data-section="addcrop">
+        <span class="nav-icon">➕</span><span>Add Crop</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="farm-badge">
+        <span>🚜</span> <strong>Green Valley Farm</strong>
+      </div>
+      <div>🕒 Last sync: <span id="lastSync">—</span></div>
+    </div>
+  </aside>
+
+  <!-- ==========================================
+       MAIN WRAPPER (TOPBAR + CONTENT)
+       ========================================== -->
+  <div class="main-wrapper">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="hamburger" id="hamburger" aria-label="Toggle Navigation Menu">☰</button>
+        <div class="topbar-title">
+          <h1>Smart Crop Monitoring System</h1>
+          <p class="topbar-sub">Empowering sustainable and data-driven farming</p>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <button class="sync-btn" id="syncBtn" title="Simulate real-time sensor update">
+          <span class="sync-icon">🔄</span>
+          <span>Refresh Data</span>
+        </button>
+        <div class="status-indicator">
+          <span class="status-dot"></span>
+          <span>Sensors Live</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="main-content">
+
+      <!-- ==========================================
+           1. HOME SECTION
+           ========================================== -->
+      <section class="section active" id="section-home">
+        <div class="home-hero">
+          <div class="hero-content">
+            <div class="hero-tag">🌿 Precision Agriculture Platform</div>
+            <h2 class="hero-title">Smart Crop Monitoring System</h2>
+            <p class="hero-desc">
+              Welcome back to your farm dashboard. Keep track of live micro-climate weather, 
+              soil moisture levels, crop growth stages, and health alerts — all in one simple, farmer-friendly portal.
+            </p>
+            <div class="hero-buttons">
+              <button class="btn-hero-primary" data-section="dashboard">
+                <span>📊</span> View Live Dashboard
+              </button>
+              <button class="btn-hero-secondary" data-section="addcrop">
+                <span>➕</span> Register New Crop
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Summary Metrics -->
+        <div class="home-summary-grid">
+          <div class="summary-card">
+            <div class="summary-icon green">🌱</div>
+            <div class="summary-info">
+              <h4 id="homeCropCount">5</h4>
+              <p>Active Monitored Crops</p>
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-icon blue">💧</div>
+            <div class="summary-info">
+              <h4>42%</h4>
+              <p>Average Soil Moisture</p>
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-icon amber">💚</div>
+            <div class="summary-info">
+              <h4 id="homeHealthScore">80%</h4>
+              <p>Overall Farm Health</p>
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-icon orange">🔔</div>
+            <div class="summary-info">
+              <h4 id="homeAlertCount">3</h4>
+              <p>Active Issues Requiring Attention</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Feature Modules -->
+        <h3 class="home-modules-title">Quick Navigation Modules</h3>
+        <div class="modules-grid">
+          <div class="module-card" data-section="dashboard">
+            <div class="module-top">
+              <div class="module-icon">📊</div>
+              <h3>Dashboard</h3>
+            </div>
+            <p>View consolidated live telemetry including ambient temperature, humidity, rainfall, and crop health indexes.</p>
+            <span class="module-link">Open Dashboard &rarr;</span>
+          </div>
+
+          <div class="module-card" data-section="crops">
+            <div class="module-top">
+              <div class="module-icon">🌱</div>
+              <h3>Crop Details</h3>
+            </div>
+            <p>Track growth stages, planting dates, field sectors, and individual health statuses for all your crops.</p>
+            <span class="module-link">Manage Crops &rarr;</span>
+          </div>
+
+          <div class="module-card" data-section="soil">
+            <div class="module-top">
+              <div class="module-icon">🧪</div>
+              <h3>Soil Monitoring</h3>
+            </div>
+            <p>Monitor real-time soil moisture %, pH levels, soil temperature, and primary NPK nutrient levels.</p>
+            <span class="module-link">Check Soil Health &rarr;</span>
+          </div>
+
+          <div class="module-card" data-section="weather">
+            <div class="module-top">
+              <div class="module-icon">⛅</div>
+              <h3>Weather Forecast</h3>
+            </div>
+            <p>Check localized farm weather forecasts, expected precipitation, humidity, and spraying conditions.</p>
+            <span class="module-link">View Forecast &rarr;</span>
+          </div>
+
+          <div class="module-card" data-section="alerts">
+            <div class="module-top">
+              <div class="module-icon">🔔</div>
+              <h3>Alerts &amp; Risks</h3>
+            </div>
+            <p>Receive timely alerts for low soil moisture, extreme temperature spikes, and crop fungal risks.</p>
+            <span class="module-link">Review Alerts &rarr;</span>
+          </div>
+
+          <div class="module-card" data-section="addcrop">
+            <div class="module-top">
+              <div class="module-icon">➕</div>
+              <h3>Add New Crop</h3>
+            </div>
+            <p>Easily enroll new crop varieties, acreage, planting dates, and growth stages into the monitoring system.</p>
+            <span class="module-link">Add Crop Form &rarr;</span>
+          </div>
+        </div>
+
+        <!-- Farmer Tips -->
+        <div class="farmer-tips-box">
+          <div class="tips-icon">💡</div>
+          <div class="tips-content">
+            <h4>Farmer's Daily Advisory Tip</h4>
+            <p>
+              Moderate rainfall is forecast in 48 hours (Thursday/Friday). Delay non-urgent irrigation in Sector A1 and hold off on foliar fertilizer application until the rain event passes to prevent nutrient run-off.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           2. DASHBOARD SECTION
+           ========================================== -->
+      <section class="section" id="section-dashboard">
+        <div class="section-header">
+          <div class="section-header-text">
+            <h2>📊 Farm Dashboard Overview</h2>
+            <p class="section-sub">Comprehensive real-time telemetry from your farm sensors</p>
+          </div>
+          <span class="chart-legend-badge" id="currentDate"></span>
+        </div>
+
+        <!-- 5 Core Dashboard KPI Cards -->
+        <div class="kpi-grid">
+          <!-- 1. Temperature -->
+          <div class="kpi-card" style="--accent-color: #f59e0b;">
+            <div class="kpi-icon">🌡️</div>
+            <div class="kpi-info">
+              <p class="kpi-label">Temperature</p>
+              <h3 class="kpi-value"><span id="dashTemp">28</span>°C</h3>
+              <p class="kpi-sub good"><span>●</span> Optimal daytime range</p>
+            </div>
+          </div>
+
+          <!-- 2. Humidity -->
+          <div class="kpi-card" style="--accent-color: #0288d1;">
+            <div class="kpi-icon">💧</div>
+            <div class="kpi-info">
+              <p class="kpi-label">Humidity</p>
+              <h3 class="kpi-value"><span id="dashHumidity">65</span>%</h3>
+              <p class="kpi-sub good"><span>●</span> Favorable transpiration</p>
+            </div>
+          </div>
+
+          <!-- 3. Soil Moisture -->
+          <div class="kpi-card" style="--accent-color: #795548;">
+            <div class="kpi-icon">🌍</div>
+            <div class="kpi-info">
+              <p class="kpi-label">Soil Moisture</p>
+              <h3 class="kpi-value"><span id="dashMoisture">42</span>%</h3>
+              <p class="kpi-sub good"><span>●</span> Sufficient root zone moisture</p>
+            </div>
+          </div>
+
+          <!-- 4. Rainfall -->
+          <div class="kpi-card" style="--accent-color: #27ae60;">
+            <div class="kpi-icon">🌧️</div>
+            <div class="kpi-info">
+              <p class="kpi-label">Rainfall (Today)</p>
+              <h3 class="kpi-value"><span id="dashRainfall">12</span> mm</h3>
+              <p class="kpi-sub">Last rain: 6 hrs ago</p>
+            </div>
+          </div>
+
+          <!-- 5. Crop Health -->
+          <div class="kpi-card" style="--accent-color: #2e7d32;">
+            <div class="kpi-icon">🌿</div>
+            <div class="kpi-info">
+              <p class="kpi-label">Crop Health</p>
+              <h3 class="kpi-value" id="dashHealth">80%</h3>
+              <p class="kpi-sub good" id="dashHealthSub">4 of 5 crops healthy</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Charts Row -->
+        <div class="charts-row">
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>🌡️ Temperature &amp; Humidity Trend (7 Days)</h3>
+              <span class="chart-legend-badge">Micro-climate</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="tempHumidChart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>💧 Soil Moisture Trend (7 Days)</h3>
+              <span class="chart-legend-badge">Threshold: 35-60%</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="moistureChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Crop Health Status -->
+        <div class="quick-status-card">
+          <div class="chart-header">
+            <h3>🌱 Field Crops Quick Health Status</h3>
+            <button class="link-btn" data-section="crops" style="background:none; border:none; color:var(--primary); font-weight:700; cursor:pointer;">
+              View All Crops &rarr;
+            </button>
+          </div>
+          <div class="status-list" id="dashboardStatusList">
+            <!-- Populated dynamically by JavaScript -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           3. CROP DETAILS SECTION
+           ========================================== -->
+      <section class="section" id="section-crops">
+        <div class="section-header">
+          <div class="section-header-text">
+            <h2>🌱 Crop Details &amp; Management</h2>
+            <p class="section-sub">Inspect growth progress, planting dates, and health conditions across fields</p>
+          </div>
+          <button class="btn-primary" data-section="addcrop">
+            <span>➕</span> Add New Crop
+          </button>
+        </div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="filter-bar">
+          <div class="filter-pills">
+            <button class="pill-btn active" data-filter="all">All Crops</button>
+            <button class="pill-btn" data-filter="healthy">🟢 Healthy</button>
+            <button class="pill-btn" data-filter="monitor">🟡 Needs Monitor</button>
+            <button class="pill-btn" data-filter="at risk">🔴 At Risk</button>
+          </div>
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="cropSearch" placeholder="Search by crop name or variety..." />
+          </div>
+        </div>
+
+        <!-- Dynamic Crop Cards Grid -->
+        <div class="crop-grid" id="cropGrid">
+          <!-- Populated dynamically by JavaScript -->
+        </div>
+      </section>
+
+      <!-- ==========================================
+           4. SOIL MONITORING SECTION
+           ========================================== -->
+      <section class="section" id="section-soil">
+        <div class="section-header">
+          <div class="section-header-text">
+            <h2>🧪 Soil Monitoring &amp; Health</h2>
+            <p class="section-sub">Multi-depth soil sensors measuring moisture, acidity, and root-zone temperatures</p>
+          </div>
+        </div>
+
+        <!-- 3 Primary Soil Metrics Cards -->
+        <div class="soil-kpi-grid">
+          <!-- Soil Moisture -->
+          <div class="soil-card">
+            <div class="soil-card-header">
+              <div class="soil-icon">💧</div>
+              <div>
+                <p class="soil-label">Soil Moisture</p>
+                <h3 class="soil-val" id="soilMoisture">42%</h3>
+              </div>
+            </div>
+            <div class="soil-progress">
+              <div class="soil-fill moisture" style="width: 42%;"></div>
+            </div>
+            <div class="soil-status-row">
+              <span>Current Status: <strong>Adequate</strong></span>
+              <span>Target: 35% – 60%</span>
+            </div>
+          </div>
+
+          <!-- Soil pH -->
+          <div class="soil-card">
+            <div class="soil-card-header">
+              <div class="soil-icon">⚗️</div>
+              <div>
+                <p class="soil-label">Soil pH Level</p>
+                <h3 class="soil-val" id="soilPH">6.5</h3>
+              </div>
+            </div>
+            <div class="soil-progress">
+              <div class="soil-fill ph" style="width: 65%;"></div>
+            </div>
+            <div class="soil-status-row">
+              <span>Status: <strong>Slightly Acidic (Ideal)</strong></span>
+              <span>Target: 6.0 – 7.2</span>
+            </div>
+          </div>
+
+          <!-- Soil Temperature -->
+          <div class="soil-card">
+            <div class="soil-card-header">
+              <div class="soil-icon">🌡️</div>
+              <div>
+                <p class="soil-label">Soil Temperature</p>
+                <h3 class="soil-val" id="soilTemp">22°C</h3>
+              </div>
+            </div>
+            <div class="soil-progress">
+              <div class="soil-fill temp" style="width: 55%;"></div>
+            </div>
+            <div class="soil-status-row">
+              <span>Status: <strong>Root Growth Optimal</strong></span>
+              <span>Target: 18°C – 28°C</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Soil 7-Day Trend Chart -->
+        <div class="chart-card full-width" style="margin-bottom: 2rem;">
+          <div class="chart-header">
+            <h3>📈 Soil Parameters Trend — Past 7 Days</h3>
+            <span class="chart-legend-badge">Sensors depth: 15cm &amp; 30cm</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="soilChart"></canvas>
+          </div>
+        </div>
+
+        <!-- NPK Soil Nutrients Overview -->
+        <div class="npk-card">
+          <div class="npk-header">
+            <h3>🌿 Soil Nutrients (NPK Fertility Index)</h3>
+            <span class="chart-legend-badge">Lab Tested: March 2026</span>
+          </div>
+          <div class="npk-grid">
+            <div class="npk-item n">
+              <span class="npk-title">Nitrogen (N)</span>
+              <p class="npk-val">140 <small style="font-size:0.8rem; font-weight:500;">mg/kg</small></p>
+              <span class="npk-status">✓ Good Foliage Support</span>
+            </div>
+            <div class="npk-item p">
+              <span class="npk-title">Phosphorus (P)</span>
+              <p class="npk-val">45 <small style="font-size:0.8rem; font-weight:500;">mg/kg</small></p>
+              <span class="npk-status">✓ Optimal Root Development</span>
+            </div>
+            <div class="npk-item k">
+              <span class="npk-title">Potassium (K)</span>
+              <p class="npk-val">190 <small style="font-size:0.8rem; font-weight:500;">mg/kg</small></p>
+              <span class="npk-status">✓ High Disease Resistance</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Farmer Soil Recommendations -->
+        <div class="soil-tips">
+          <h3>💡 Soil Health Recommendations for Farmers</h3>
+          <ul>
+            <li>✅ <strong>pH Balance:</strong> Soil pH of 6.5 is in the gold standard zone for cereal and vegetable crops. No lime or sulfur treatment needed.</li>
+            <li>⚠️ <strong>Sector B2 Moisture Alert:</strong> Sector B2 moisture is down to 18%. Switch on Zone 2 drip line for 40 minutes before midday.</li>
+            <li>✅ <strong>Temperature Stability:</strong> Deep mulch on potato beds is preventing sub-soil evaporation and keeping root temps steady at 22°C.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           5. WEATHER SECTION
+           ========================================== -->
+      <section class="section" id="section-weather">
+        <div class="section-header">
+          <div class="section-header-text">
+            <h2>⛅ Farm Weather &amp; Climate</h2>
+            <p class="section-sub">Local agro-meteorological station readings and rainfall forecast</p>
+          </div>
+        </div>
+
+        <!-- Weather Hero Card -->
+        <div class="weather-hero">
+          <div class="weather-main">
+            <div class="weather-icon-big">🌤️</div>
+            <div class="weather-main-info">
+              <p class="weather-condition">Partly Cloudy &amp; Pleasant</p>
+              <h2 class="weather-temp-big" id="weatherTempBig">28°C</h2>
+              <p class="weather-loc">📍 Green Valley Farm Station • Updated live</p>
+            </div>
+          </div>
+
+          <div class="weather-details-grid">
+            <div class="weather-detail-card">
+              <div class="detail-icon">💧</div>
+              <div>
+                <p>Humidity</p>
+                <strong id="wHumidity">65%</strong>
+              </div>
+            </div>
+            <div class="weather-detail-card">
+              <div class="detail-icon">🌧️</div>
+              <div>
+                <p>Rainfall Today</p>
+                <strong id="wRainfall">12 mm</strong>
+              </div>
+            </div>
+            <div class="weather-detail-card">
+              <div class="detail-icon">💨</div>
+              <div>
+                <p>Wind Speed</p>
+                <strong>14 km/h (NE)</strong>
+              </div>
+            </div>
+            <div class="weather-detail-card">
+              <div class="detail-icon">☀️</div>
+              <div>
+                <p>UV Radiation</p>
+                <strong>6 (Moderate)</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5-Day Forecast -->
+        <div class="forecast-section">
+          <h3>📅 5-Day Farm Weather Forecast</h3>
+          <div class="forecast-cards" id="forecastCards">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Weekly Rainfall Forecast Chart -->
+        <div class="chart-card full-width">
+          <div class="chart-header">
+            <h3>🌧️ Expected Weekly Rainfall Forecast (mm)</h3>
+            <span class="chart-legend-badge">Rain radar model</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="rainfallChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           6. ALERTS SECTION
+           ========================================== -->
+      <section class="section" id="section-alerts">
+        <div class="section-header">
+          <div class="section-header-text">
+            <h2>🔔 Alerts &amp; Diagnostic Notifications</h2>
+            <p class="section-sub">Early detection of moisture stress, heat spikes, and crop diseases</p>
+          </div>
+        </div>
+
+        <!-- Summary counter pills -->
+        <div class="alerts-summary">
+          <div class="alert-count-card red">
+            <div class="alert-count-num" id="criticalCount">1</div>
+            <div class="alert-count-label">Critical Issues<br/><small style="color:#d32f2f;">Requires Immediate Action</small></div>
+          </div>
+          <div class="alert-count-card orange">
+            <div class="alert-count-num" id="warningCount">2</div>
+            <div class="alert-count-label">Warnings<br/><small style="color:#ed6c02;">Monitor Closely</small></div>
+          </div>
+          <div class="alert-count-card green">
+            <div class="alert-count-num" id="resolvedCount">1</div>
+            <div class="alert-count-label">Resolved Issues<br/><small style="color:#2e7d32;">Action Completed</small></div>
+          </div>
+        </div>
+
+        <!-- Alert Items List -->
+        <div class="alerts-list" id="alertsList">
+          <!-- Populated by JavaScript -->
+        </div>
+      </section>
+
+      <!-- ==========================================
+           7. ADD CROP FORM SECTION
+           ========================================== -->
+      <section class="section" id="section-addcrop">
+        <div class="section-header">
+          <div class="section-header-text">
+            <h2>➕ Add New Crop to Monitoring</h2>
+            <p class="section-sub">Enroll a new planting block, track growth stages, and automate sensor linkage</p>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <form id="addCropForm" novalidate>
+            <div class="form-grid">
+              <!-- Crop Name -->
+              <div class="form-group">
+                <label for="cropName">Crop Name <span class="req">*</span></label>
+                <input type="text" id="cropName" placeholder="e.g. Wheat, Maize, Tomato, Soybean" required />
+                <span class="field-error" id="cropNameErr"></span>
+              </div>
+
+              <!-- Variety -->
+              <div class="form-group">
+                <label for="cropVariety">Variety / Hybrid</label>
+                <input type="text" id="cropVariety" placeholder="e.g. Pioneer 3396, Pusa 1121" />
+              </div>
+
+              <!-- Planting Date -->
+              <div class="form-group">
+                <label for="plantDate">Planting Date <span class="req">*</span></label>
+                <input type="date" id="plantDate" required />
+                <span class="field-error" id="plantDateErr"></span>
+              </div>
+
+              <!-- Field Area -->
+              <div class="form-group">
+                <label for="fieldArea">Field Area (Acres)</label>
+                <input type="number" id="fieldArea" placeholder="e.g. 2.5" min="0.1" step="0.1" />
+              </div>
+
+              <!-- Growth Stage -->
+              <div class="form-group">
+                <label for="growthStage">Current Growth Stage <span class="req">*</span></label>
+                <select id="growthStage" required>
+                  <option value="">— Select Stage —</option>
+                  <option value="Germination">Germination</option>
+                  <option value="Seedling">Seedling</option>
+                  <option value="Vegetative">Vegetative</option>
+                  <option value="Flowering">Flowering</option>
+                  <option value="Fruiting">Fruiting</option>
+                  <option value="Maturity">Maturity</option>
+                  <option value="Harvest">Harvest Ready</option>
+                </select>
+                <span class="field-error" id="growthStageErr"></span>
+              </div>
+
+              <!-- Health Status -->
+              <div class="form-group">
+                <label for="healthStatus">Initial Health Status</label>
+                <select id="healthStatus">
+                  <option value="Healthy">Healthy (Optimal conditions)</option>
+                  <option value="Monitor">Needs Monitoring (Mild stress)</option>
+                  <option value="At Risk">At Risk (Pests/disease/water deficit)</option>
+                </select>
+              </div>
+
+              <!-- Sector / Location -->
+              <div class="form-group full-span">
+                <label for="fieldSector">Farm Sector / Plot ID</label>
+                <input type="text" id="fieldSector" placeholder="e.g. Sector B2 - North Ridge" />
+              </div>
+
+              <!-- Notes -->
+              <div class="form-group full-span">
+                <label for="cropNotes">Field Notes &amp; Observations</label>
+                <textarea id="cropNotes" rows="3" placeholder="Add any details about soil treatment, seed treatment, irrigation plan, etc."></textarea>
+              </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+              <button type="reset" class="btn-secondary">Clear Form</button>
+              <button type="submit" class="btn-primary">🌱 Add Crop to System</button>
+            </div>
+          </form>
+
+          <!-- Inline Success Notice -->
+          <div class="form-success" id="formSuccess" hidden>
+            <span>✅</span>
+            <p>Crop registered successfully! You can view and manage it in <button type="button" class="link-btn" data-section="crops">Crop Details</button>.</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Mobile Drawer Backdrop Overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+</body>
+</html>
